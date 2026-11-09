@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102d56">
+  <title>Apresentação Institucional | Tec Escola</title>
+  <link rel="icon" type="image/svg+xml" href="favicon-apresentacao.svg">
+  <style>
+    :root {
+      --navy: #102d56;
+      --navy-deep: #0b2345;
+      --blue: #1689df;
+      --cyan: #2bd6ee;
+      --ink: #183b69;
+      --muted: #5e7391;
+      --line: #d9e6f3;
+      --soft: #f2f8fd;
+      --white: #ffffff;
+      --success: #147e59;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #eaf3fb;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input { font: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 22px;
+      background: rgba(16, 45, 86, .97);
+      box-shadow: 0 4px 18px rgba(16, 45, 86, .18);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--white);
+      font-weight: 800;
+    }
+
+    .topbar-brand img {
+      width: 38px;
+      height: 38px;
+    }
+
+    .topbar-brand span {
+      display: block;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .topbar-brand small {
+      display: block;
+      margin-top: 2px;
+      color: #bfeef7;
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .topbar-actions,
+    .editor-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 10px 14px;
+      color: var(--white);
+      background: var(--blue);
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .18s ease, background .18s ease;
+    }
+
+    button:hover {
+      background: #0f70bd;
+      transform: translateY(-1px);
+    }
+
+    button.secondary {
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .35);
+    }
+
+    button.secondary:hover { background: rgba(255, 255, 255, .2); }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+      gap: 24px;
+      width: min(1280px, calc(100% - 32px));
+      margin: 24px auto 42px;
+    }
+
+    .editor-panel {
+      align-self: start;
+      position: sticky;
+      top: 86px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--white);
+      box-shadow: 0 10px 28px rgba(16, 45, 86, .1);
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .editor-panel h1 {
+      margin: 8px 0 8px;
+      color: var(--navy);
+      font-size: 25px;
+      line-height: 1.12;
+    }
+
+    .editor-panel p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .field { margin: 0 0 14px; }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--ink);
+      background: #fbfdff;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(22, 137, 223, .13);
+    }
+
+    .editor-actions {
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .editor-actions button {
+      flex: 0 1 220px;
+      min-width: 190px;
+    }
+
+    .editor-actions button.download-action {
+      background: #0f6fb8;
+    }
+
+    .editor-actions button.download-action:hover {
+      background: #0b5f9f;
+    }
+
+    .status {
+      display: none;
+      min-height: 22px;
+      margin: 14px 0 0;
+      color: var(--success);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .preview-area { min-width: 0; }
+
+    .preview-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 0 0 12px;
+    }
+
+    .preview-heading h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .preview-heading span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .preview-stage {
+      display: flex;
+      justify-content: center;
+      padding: 18px;
+      border: 1px solid #d6e7f5;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #eef8ff, #dceefb);
+    }
+
+    .email-preview {
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--white);
+      box-shadow: 0 14px 34px rgba(16, 45, 86, .17);
+    }
+
+    .email-header {
+      padding: 28px 34px 32px;
+      background: var(--navy);
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-lockup img {
+      width: 56px;
+      height: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .brand-name {
+      color: var(--white);
+      font-size: 25px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .brand-name span { color: #50c6f7; }
+
+    .brand-tagline {
+      margin-top: 4px;
+      color: #c4dbf3;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .email-section { padding: 34px 38px 26px; }
+
+    .email-section + .email-section { padding-top: 18px; }
+
+    .email-section h3 + .benefit-list { margin-top: 14px; }
+
+    .email-eyebrow {
+      margin: 0 0 16px;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .email-section h3 {
+      margin: 0;
+      color: #122b4c;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .email-section h3 span { color: #1587d5; }
+
+    .email-lead {
+      margin: 16px 0 0;
+      color: #52647b;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .message-box {
+      margin: 0 38px;
+      padding: 22px;
+      border: 1px solid #d7e8f8;
+      border-left: 4px solid #228ce2;
+      border-radius: 10px;
+      background: #f1f7fd;
+    }
+
+    .message-box p {
+      margin: 0;
+      color: #425772;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .message-box p + p { margin-top: 12px; }
+    .message-box strong { color: #173458; }
+
+    .benefit-list { margin: 0; padding: 0; list-style: none; }
+
+    .benefit-list li {
+      display: grid;
+      grid-template-columns: 25px minmax(0, 1fr);
+      gap: 10px;
+      padding: 0 0 16px;
+      color: #52647b;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .benefit-number {
+      width: 25px;
+      height: 25px;
+      border-radius: 6px;
+      color: #147bcb;
+      background: #e8f3ff;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 25px;
+      text-align: center;
+    }
+
+    .benefit-list strong { color: #203c5d; }
+
+    .email-highlight {
+      padding: 28px 38px;
+      color: var(--white);
+      background: var(--navy);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.55;
+    }
+
+    .email-cta {
+      padding: 32px 38px 20px;
+      text-align: center;
+    }
+
+    .email-cta a {
+      display: inline-block;
+      padding: 16px 28px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--white);
+      background: #167ed0;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .email-cta p {
+      margin: 16px 0 0;
+      color: #6a7e93;
+      font-size: 13px;
+    }
+
+    .email-cta .email-cta-attachment {
+      margin-top: 10px;
+      color: #173458;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .email-signature {
+      padding: 28px 38px 24px;
+      border-top: 1px solid #e5ebf3;
+      color: #445a73;
+      background: #f9fbfe;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .email-signature p { margin: 0 0 8px; }
+    .email-signature p + p { margin-top: 18px; }
+    .email-signature strong { color: #173458; }
+
+    @media (max-width: 860px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .workspace { grid-template-columns: 1fr; }
+      .editor-panel { position: static; }
+      .topbar-actions { width: 100%; }
+    }
+
+    @media (max-width: 620px) {
+      .workspace { width: min(100% - 20px, 600px); margin-top: 12px; }
+      .topbar { padding: 12px 14px; }
+      .topbar-actions button { flex: 1 1 150px; }
+      .preview-stage { padding: 0; border: 0; background: transparent; }
+      .email-header,
+      .email-section,
+      .email-highlight,
+      .email-cta,
+      .email-signature { padding-left: 22px; padding-right: 22px; }
+      .message-box { margin-left: 22px; margin-right: 22px; }
+      .email-section h3 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <img src="favicon-apresentacao.svg" alt="">
+      <div>
+        <span>Tec Escola</span>
+        <small>Apresentação institucional</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <aside class="editor-panel">
+      <div class="eyebrow">Editor do comercial</div>
+      <h1>Prepare a apresentação</h1>
+      <p>Preencha os dados, confira a prévia e copie a apresentação como imagem para o Gmail ou Lark.</p>
+
+      <div class="field">
+        <label for="responsavel">Nome do responsável</label>
+        <input id="responsavel" type="text" placeholder="Ex.: Ana Souza" autocomplete="name">
+      </div>
+
+      <div class="field">
+        <label for="consultor">Nome do consultor</label>
+        <input id="consultor" type="text" placeholder="Ex.: João Silva">
+      </div>
+
+      <div class="editor-actions">
+        <button type="button" id="copy-lark-panel">Copiar</button>
+        <button type="button" id="download-image-panel" class="download-action">Download</button>
+      </div>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </aside>
+
+    <section class="preview-area" aria-label="Prévia da apresentação">
+      <div class="preview-heading">
+        <h2>Prévia da mensagem</h2>
+        <span>Atualizada enquanto você digita</span>
+      </div>
+
+      <div class="preview-stage">
+        <article class="email-preview" id="email-preview">
+          <header class="email-header">
+            <div class="brand-lockup">
+              <img src="https://tecescola.grupotec.dev.br/assets/logo-tec-escola.png" alt="Tec Escola">
+              <div>
+                <div class="brand-name">Tec <span>Escola</span></div>
+                <div class="brand-tagline">GESTÃO ACADÊMICA INTELIGENTE</div>
+              </div>
+            </div>
+          </header>
+
+          <section class="email-section">
+            <p class="email-eyebrow">APRESENTAÇÃO INSTITUCIONAL</p>
+            <h3>Conheça a <span>Tec Escola</span></h3>
+            <p class="email-lead">Gestão, comunicação e experiência escolar em uma única plataforma.</p>
+          </section>
+
+          <section class="message-box">
+            <p>Olá,<span id="preview-greeting-name"> <strong id="preview-responsavel"></strong>!</span></p>
+            <p>Gostaria de apresentar a <strong>Tec Escola</strong>, uma plataforma de gestão acadêmica inteligente criada para tornar a rotina da instituição mais organizada, conectada e eficiente.</p>
+          </section>
+
+          <section class="email-section">
+            <h3 style="font-size:21px;">Uma plataforma para toda a comunidade escolar</h3>
+            <ul class="benefit-list">
+              <li><span class="benefit-number">01</span><span><strong>Gestão acadêmica organizada</strong><br>Centralize turmas, matrículas, grade de horários, frequência, notas, boletins e histórico escolar.</span></li>
+              <li><span class="benefit-number">02</span><span><strong>Aluno, família e professor conectados</strong><br>Alunos acompanham a rotina, professores disponibilizam atividades e as famílias acessam notas, frequência, avisos e comunicados.</span></li>
+              <li><span class="benefit-number">03</span><span><strong>Secretaria com menos retrabalho</strong><br>Organize matrículas, cadastros, documentos, histórico escolar e o atendimento da instituição em um só ambiente.</span></li>
+              <li><span class="benefit-number">04</span><span><strong>Central de Estudos para o ENEM</strong><br>Acesse temas do ENEM dos últimos dez anos, pratique redação, realize simulados com questões variadas de diferentes edições e explore outros módulos de estudo.</span></li>
+              <li><span class="benefit-number">05</span><span><strong>Educação Inclusiva</strong><br>Trabalhe com exercícios interativos e acompanhe a evolução pedagógica dos estudantes.</span></li>
+              <li><span class="benefit-number">06</span><span><strong>TV Escola e menos papel</strong><br>Exiba cardápios, atividades do dia, avisos e comunicados em um mural digital, com mais agilidade e sustentabilidade.</span></li>
+              <li><span class="benefit-number">07</span><span><strong>Estudo de línguas estrangeiras</strong><br>Atividades de inglês, espanhol e coreano, com um guia para os alunos testarem a fluência e aprenderem uma nova língua.</span></li>
+              <li><span class="benefit-number">08</span><span><strong>Apoio psicológico com segurança</strong><br>Chat com autorização dos pais ou responsáveis para contato direto com o psicólogo da instituição.</span></li>
+            </ul>
+          </section>
+
+          <div class="email-highlight">Mais organização para a gestão. Mais clareza para as famílias. Mais apoio para a aprendizagem.</div>
+
+          <section class="email-cta">
+            <p class="email-cta-attachment">A apresentação institucional da Tec Escola segue anexada a este e-mail.</p>
+          </section>
+
+          <footer class="email-signature">
+            <p>Estamos à disposição para apresentar a plataforma e esclarecer qualquer dúvida.</p>
+            <p>Atenciosamente,<br><strong id="preview-consultor"></strong><br>Equipe Comercial · Tec Escola</p>
+          </footer>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="html2canvas.min.js"></script>
+  <script>
+    const STORAGE_KEY = 'tec-escola-apresentacao-editor-v1';
+    const CTA_URL = 'https://linktr.ee.grupotec.dev.br/tec-escola';
+    const fields = {
+      responsavel: document.getElementById('responsavel'),
+      consultor: document.getElementById('consultor')
+    };
+
+    const preview = {
+      responsavel: document.getElementById('preview-responsavel'),
+      greetingName: document.getElementById('preview-greeting-name'),
+      consultor: document.getElementById('preview-consultor'),
+      status: document.getElementById('status')
+    };
+    const copyLarkButtons = document.querySelectorAll('#copy-lark, #copy-lark-panel');
+    const downloadImageButton = document.getElementById('download-image-panel');
+    let copyLarkResetTimer;
+
+    const benefits = [
+      ['Gestão acadêmica organizada', 'Centralize turmas, matrículas, grade de horários, frequência, notas, boletins e histórico escolar.'],
+      ['Aluno, família e professor conectados', 'Alunos acompanham a rotina, professores disponibilizam atividades e as famílias acessam notas, frequência, avisos e comunicados.'],
+      ['Secretaria com menos retrabalho', 'Organize matrículas, cadastros, documentos, histórico escolar e o atendimento da instituição em um só ambiente.'],
+      ['Central de Estudos para o ENEM', 'Acesse temas do ENEM dos últimos dez anos, pratique redação, realize simulados com questões variadas de diferentes edições e explore outros módulos de estudo.'],
+      ['Educação Inclusiva', 'Trabalhe com exercícios interativos e acompanhe a evolução pedagógica dos estudantes.'],
+      ['TV Escola e menos papel', 'Exiba cardápios, atividades do dia, avisos e comunicados em um mural digital, com mais agilidade e sustentabilidade.'],
+      ['Estudo de línguas estrangeiras', 'Atividades de inglês, espanhol e coreano, com um guia para os alunos testarem a fluência e aprenderem uma nova língua.'],
+      ['Apoio psicológico com segurança', 'Chat com autorização dos pais ou responsáveis para contato direto com o psicólogo da instituição.']
+    ];
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>'"]/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[character]));
+    }
+
+    function values() {
+      return {
+        responsavel: fields.responsavel.value.trim(),
+        consultor: fields.consultor.value.trim()
+      };
+    }
+
+    function updatePreview() {
+      const data = values();
+      preview.responsavel.textContent = data.responsavel;
+      preview.greetingName.style.display = data.responsavel ? 'inline' : 'none';
+      preview.consultor.textContent = data.consultor;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function buildEmailHtml() {
+      const data = values();
+      const rows = benefits.map((benefit, index) => `
+        <tr><td align="center" style="padding:0 0 18px;text-align:center;color:#52647B;font-size:14px;line-height:22px;word-break:normal;overflow-wrap:break-word;">
+          <span style="display:inline-block;width:28px;height:25px;border-radius:6px;background-color:#E8F3FF;color:#147BCB;text-align:center;line-height:25px;font-size:14px;font-weight:700;white-space:nowrap;">${String(index + 1).padStart(2, '0')}</span><br>
+          <strong style="font-size:15px;line-height:22px;color:#203C5D;">${escapeHtml(benefit[0])}</strong><br>${escapeHtml(benefit[1])}
+        </td></tr>`).join('');
+
+      return `
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#EEF5FB" style="margin:0;background-color:#EEF5FB;font-family:Arial,Helvetica,sans-serif;color:#122B4C;">
+  <tr><td align="center" style="padding:28px 12px 36px;text-align:center;">
+    <center style="width:100%;text-align:center;">
+    <table role="presentation" align="center" width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="width:600px;max-width:100%;margin:0 auto;background:#FFFFFF;border-radius:16px;overflow:hidden;border-collapse:separate;">
+      <tr><td bgcolor="#102D56" style="padding:28px 34px 32px;background-color:#102D56;border-radius:16px 16px 0 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#102D56" style="background-color:#102D56;"><tr>
+          <td valign="middle" width="72" bgcolor="#102D56" style="width:72px;padding-right:16px;background-color:#102D56;"><img src="https://tecescola.grupotec.dev.br/assets/logo-tec-escola.png" width="56" alt="Tec Escola" style="width:56px;max-width:56px;height:auto;display:block;background-color:#102D56;"></td>
+          <td valign="middle" bgcolor="#102D56" style="background-color:#102D56;"><div style="font-size:25px;line-height:29px;font-weight:800;color:#FFFFFF;white-space:nowrap;">Tec <span style="color:#50C6F7;">Escola</span></div><div style="padding-top:4px;font-size:9px;line-height:13px;font-weight:700;letter-spacing:1px;color:#C4DBF3;white-space:nowrap;">GESTÃO ACADÊMICA INTELIGENTE</div></td>
+        </tr></table>
+      </td></tr>
+      <tr><td align="center" style="padding:36px 38px 28px;background-color:#FFFFFF;text-align:center;"><p style="margin:0 0 16px;font-size:11px;line-height:18px;font-weight:700;letter-spacing:2px;color:#187FD1;">APRESENTAÇÃO INSTITUCIONAL</p><h1 style="margin:0;font-size:30px;line-height:36px;color:#122B4C;font-weight:800;">Conheça a <span style="color:#1587D5;">Tec Escola</span></h1><p style="margin:16px 0 0;font-size:16px;line-height:26px;color:#52647B;">Gestão, comunicação e experiência escolar em uma única plataforma.</p></td></tr>
+      <tr><td align="center" style="padding:22px 38px 28px;background-color:#FFFFFF;text-align:center;"><table role="presentation" align="center" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F1F7FD" style="width:100%;max-width:100%;margin:0 auto;background-color:#F1F7FD;border:1px solid #D7E8F8;border-radius:10px;overflow:hidden;table-layout:fixed;"><tr><td align="center" style="padding:22px;text-align:center;"><p style="margin:0 0 12px;font-size:16px;line-height:24px;color:#173458;text-align:center;">Olá,${data.responsavel ? ` <strong>${escapeHtml(data.responsavel)}</strong>!` : ''}</p><p style="margin:0;font-size:15px;line-height:25px;color:#425772;text-align:center;">Gostaria de apresentar a <strong>Tec Escola</strong>, uma plataforma de gestão acadêmica inteligente criada para tornar a rotina da instituição mais organizada, conectada e eficiente.</p></td></tr></table></td></tr>
+      <tr><td align="center" style="padding:22px 38px 30px;background-color:#FFFFFF;text-align:center;"><h2 style="margin:0;padding:0;font-size:21px;line-height:29px;font-weight:800;color:#183656;text-align:center;">Uma plataforma para toda a comunidade escolar</h2><table role="presentation" align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:16px auto 0;text-align:center;"><tr><td height="22" style="height:22px;padding:0;font-size:0;line-height:0;">&nbsp;</td></tr>${rows}</table></td></tr>
+      <tr><td align="center" style="padding:28px 38px;background-color:#102D56;color:#FFFFFF;font-size:18px;line-height:28px;font-weight:700;text-align:center;">Mais organização para a gestão. Mais clareza para as famílias. Mais apoio para a aprendizagem.</td></tr>
+      <tr><td align="center" style="padding:32px 38px 20px;background-color:#FFFFFF;text-align:center;"><table role="presentation" align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 auto;text-align:center;"><tr><td align="center" style="text-align:center;"><center style="text-align:center;"><table role="presentation" align="center" width="260" cellpadding="0" cellspacing="0" border="0" bgcolor="#167ED0" style="display:inline-table;width:260px;max-width:100%;margin:0 auto;background-color:#167ED0;border-collapse:separate;border-radius:10px;text-align:center;"><tr><td align="center" valign="middle" width="260" bgcolor="#167ED0" style="width:260px;background-color:#167ED0;border:0;border-radius:10px;text-align:center;"><a href="${CTA_URL}" target="_blank" style="display:block;width:100%;box-sizing:border-box;padding:16px 12px;color:#FFFFFF !important;font-size:15px;line-height:20px;font-weight:700;text-decoration:none;background-color:#167ED0;border:0;border-radius:10px;text-align:center;white-space:nowrap;"><font color="#FFFFFF" style="color:#FFFFFF !important;text-decoration:none;"><span style="color:#FFFFFF !important;text-decoration:none;">Conheça a Tec Escola</span></font></a></td></tr></table></center></td></tr><tr><td align="center" style="text-align:center;"><p style="margin:16px 0 0;font-size:13px;line-height:21px;color:#6A7E93;text-align:center;">Clique no botão acima para conhecer a Tec Escola e acessar o site e as redes sociais da empresa.</p><p style="margin:10px 0 0;font-size:14px;line-height:22px;font-weight:700;color:#173458;text-align:center;">A apresentação institucional da Tec Escola segue anexada a este e-mail.</p></td></tr></table></td></tr>
+      <tr><td align="center" style="padding:28px 38px 24px;background-color:#F9FBFE;border-top:1px solid #E5EBF3;text-align:center;"><table role="presentation" align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 auto;text-align:center;"><tr><td align="center" style="padding:0;text-align:center;font-size:14px;line-height:22px;color:#445A73;"><span style="display:block;text-align:center;">Estamos à disposição para apresentar a plataforma e esclarecer qualquer dúvida.</span><span style="display:block;padding-top:18px;text-align:center;">Atenciosamente,</span><strong style="display:block;color:#173458;text-align:center;">${escapeHtml(data.consultor)}</strong><span style="display:block;text-align:center;">Equipe Comercial · Tec Escola</span></td></tr></table></td></tr>
+    </table>
+    </center>
+  </td></tr>
+</table>`;
+    }
+
+    function buildPlainText() {
+      const data = values();
+      const list = benefits.map((benefit, index) => `${String(index + 1).padStart(2, '0')}. ${benefit[0]}\n${benefit[1]}`).join('\n\n');
+      const greeting = data.responsavel ? `Olá, ${data.responsavel}!` : 'Olá,';
+      return `${greeting}\n\nGostaria de apresentar a Tec Escola, uma plataforma de gestão acadêmica inteligente criada para tornar a rotina da instituição mais organizada, conectada e eficiente.\n\nUma plataforma para toda a comunidade escolar\n\n${list}\n\nMais organização para a gestão. Mais clareza para as famílias. Mais apoio para a aprendizagem.\n\nA apresentação institucional da Tec Escola segue anexada a este e-mail.\n\nEstamos à disposição para apresentar a plataforma e esclarecer qualquer dúvida.\n\nAtenciosamente,\n${data.consultor}\nEquipe Comercial · Tec Escola`;
+    }
+
+    async function capturePreviewImage() {
+      if (!window.html2canvas) {
+        throw new Error('A captura visual ainda não foi carregada.');
+      }
+
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+
+      const isMobile = window.matchMedia('(max-width: 620px)').matches;
+      const canvas = await window.html2canvas(document.getElementById('email-preview'), {
+        backgroundColor: '#FFFFFF',
+        scale: isMobile ? 2 : 1.5,
+        useCORS: true,
+        allowTaint: false,
+        imageTimeout: 12000,
+        logging: false
+      });
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) throw new Error('Não foi possível preparar a imagem.');
+      return blob;
+    }
+
+    function blobToDataUrl(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    async function copyImageWithSelection(dataUrl) {
+      const holder = document.createElement('div');
+      holder.contentEditable = 'true';
+      holder.setAttribute('aria-hidden', 'true');
+      holder.style.position = 'fixed';
+      holder.style.left = '-10000px';
+      holder.style.top = '0';
+      holder.style.width = '600px';
+      holder.style.background = '#FFFFFF';
+      holder.style.opacity = '0.01';
+      holder.style.pointerEvents = 'none';
+      holder.innerHTML = `<img src="${dataUrl}" alt="Apresentação institucional da Tec Escola" style="display:block;width:600px;height:auto;border:0;">`;
+      document.body.appendChild(holder);
+      const image = holder.querySelector('img');
+      if (image && image.decode) {
+        await image.decode().catch(() => {});
+      }
+      holder.focus();
+
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(holder);
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      let copied = false;
+      try {
+        copied = document.execCommand('copy');
+      } finally {
+        selection.removeAllRanges();
+        holder.remove();
+      }
+      return copied;
+    }
+
+    async function copyImageToClipboard(capturePromise) {
+      const dataUrlPromise = capturePromise.then(blobToDataUrl);
+      let clipboardWritePromise = null;
+      let nativeClipboardAttempted = false;
+
+      if (navigator.clipboard && window.ClipboardItem) {
+        nativeClipboardAttempted = true;
+        try {
+          // Start the write during the button gesture. Keep only the PNG so
+          // Gmail and Slack cannot choose the HTML fallback as plain text.
+          clipboardWritePromise = navigator.clipboard.write([
+            new ClipboardItem({ 'image/png': capturePromise })
+          ]);
+        } catch (clipboardError) {
+          console.warn('A cópia da imagem foi bloqueada pelo navegador.', clipboardError);
+        }
+      }
+
+      const [blob, dataUrl] = await Promise.all([capturePromise, dataUrlPromise]);
+      if (clipboardWritePromise) {
+        try {
+          await clipboardWritePromise;
+          return { copied: true, blob, dataUrl };
+        } catch (clipboardError) {
+          console.warn('A cópia da imagem foi rejeitada pelo navegador.', clipboardError);
+          return { copied: false, blob, dataUrl };
+        }
+      }
+
+      if (nativeClipboardAttempted) {
+        return { copied: false, blob, dataUrl };
+      }
+
+      // Only use the selection fallback on browsers without the image
+      // clipboard API. It can be serialized as HTML source by Gmail.
+      return { copied: await copyImageWithSelection(dataUrl), blob, dataUrl };
+    }
+
+    async function copyMessage() {
+      setCopyButtonLabel('Copiando...');
+      try {
+        const capturePromise = capturePreviewImage();
+        const { copied } = await copyImageToClipboard(capturePromise);
+
+        if (copied) {
+          preview.status.textContent = 'Copiado. Para enviar pelo celular, prefira Download e anexe o arquivo.';
+          showCopyLarkFeedback();
+        } else {
+          throw new Error('Este navegador bloqueou a cópia da imagem.');
+        }
+      } catch (error) {
+        console.error(error);
+        setCopyButtonLabel('Copiar');
+        preview.status.textContent = 'Não foi possível copiar a imagem. Tente novamente.';
+      }
+    }
+
+    async function downloadMessageImage() {
+      downloadImageButton.textContent = 'Preparando...';
+      downloadImageButton.disabled = true;
+      try {
+        const blob = await capturePreviewImage();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'apresentacao-tec-escola.png';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        preview.status.textContent = 'Imagem baixada. Anexe este arquivo no Lark ou no Gmail.';
+        downloadImageButton.textContent = 'Baixada';
+        setTimeout(() => {
+          downloadImageButton.textContent = 'Download';
+        }, 2000);
+      } catch (error) {
+        console.error(error);
+        preview.status.textContent = 'Não foi possível baixar a imagem. Tente novamente.';
+        downloadImageButton.textContent = 'Download';
+      } finally {
+        downloadImageButton.disabled = false;
+      }
+    }
+
+    function setCopyButtonLabel(label) {
+      clearTimeout(copyLarkResetTimer);
+      copyLarkButtons.forEach(button => {
+        button.textContent = label;
+      });
+    }
+
+    function showCopyLarkFeedback() {
+      clearTimeout(copyLarkResetTimer);
+      copyLarkButtons.forEach(button => {
+        button.dataset.defaultLabel = button.dataset.defaultLabel || 'Copiar';
+        button.textContent = 'Copiado';
+      });
+      copyLarkResetTimer = setTimeout(() => {
+        copyLarkButtons.forEach(button => {
+          button.textContent = button.dataset.defaultLabel || 'Copiar';
+        });
+      }, 2000);
+    }
+
+    function loadSavedValues() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        Object.keys(fields).forEach(key => { fields[key].value = saved[key] || ''; });
+      } catch (error) {
+        // Ignore invalid local drafts and keep the empty form usable.
+      }
+      updatePreview();
+    }
+
+    Object.values(fields).forEach(field => field.addEventListener('input', updatePreview));
+    copyLarkButtons.forEach(button => button.addEventListener('click', copyMessage));
+    downloadImageButton.addEventListener('click', downloadMessageImage);
+    loadSavedValues();
+  </script>
+</body>
+</html>
